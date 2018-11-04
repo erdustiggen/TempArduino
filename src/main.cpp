@@ -1,25 +1,22 @@
 #include <Arduino.h>
-#include <stdint.h>
-#include "powermeter30A.hpp"
-#include "circularbuffer.hpp"
-/*
-	Because it is a -30 to +30 Module, the resolution is 66mV per ampere on the output pin.
-*/
-// uint8_t buff[50];
-// PMCircularBuffer pmBuf(buff, 50);
+#include "UltraSonic.hpp"
 
-PowerMeter30A pMeter;
-double current{0};
+int trigPin = A0;
+int echoPin = A1;
+
+UltraSonic ultraSonic(trigPin, echoPin);
+
+int distanceToObject;
 
 void setup() {
 	Serial.begin(9600);
 }
 
 void loop() {
+	distanceToObject = ultraSonic.getFilteredObjectDistance();
+	Serial.print("Distance to closest object = ");
+	Serial.print(distanceToObject);
+	Serial.println(" cm");
 
-	current = pMeter.getCurrent();
-	Serial.print("Current is = ");
-	Serial.print(current);
-	Serial.print(" A\n");
-
+	delay(100);
 }
